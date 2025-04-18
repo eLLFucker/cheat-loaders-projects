@@ -10,7 +10,7 @@ var infoText = "\n----  Informasi Author  ----\n" +
     "License  : Apache License 2.0\n";
 
 // Log awal bahwa script telah mulai berjalan
-debug("Script Cheats Loaders mulai dijalankan.");
+debug("Script CheatLoader mulai dijalankan.");
 debug(infoText);
 
 // ------------------------------------------------------------------
@@ -88,7 +88,7 @@ if (calculatedMD5 === null) {
     showToast("Gagal memverifikasi file loader: File tidak ditemukan!", 1);
 } else if (calculatedMD5 !== expectedMD5) {
     debug("MD5 tidak cocok! Diharapkan: " + expectedMD5 + ", Ditemukan: " + calculatedMD5);
-    showToast("File loader tidak valid (MD5 mismatch)!", 1);
+    showToast("File loader tidak valid", 1);
 } else if (calculatedMD5 == expectedMD5) {
     debug("MD5 file loader valid: " + calculatedMD5);
     showToast("[MODS] File loader verified ✅", 0);
