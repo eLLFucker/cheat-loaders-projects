@@ -19,11 +19,13 @@ debug(infoText);
 var packageName = context.getPackageName();
 var targetPackage = "com.pixticle.bokuboku.patch";
 
-// Kelas-kelas untuk keperluan manipulasi file
+// Kelas-kelas untuk keperluan manipulasi file dan MD5
 var File = Java.use("java.io.File");
+var FileInputStream = Java.use("java.io.FileInputStream");
 var FileOutputStream = Java.use("java.io.FileOutputStream");
 var InputStreamReader = Java.use("java.io.InputStreamReader");
 var BufferedReader = Java.use("java.io.BufferedReader");
+var MessageDigest = Java.use("java.security.MessageDigest");
 
 // SharedPreferences untuk menyimpan data konfigurasi
 var prefName = "com.pixticle.bokuboku.patch.v2.playerprefs";
@@ -34,6 +36,64 @@ var editor = prefs.edit();
 var MediaPlayer = Java.use("android.media.MediaPlayer");
 var assetManager = context.getAssets();
 var mediaPlayer = null; // Inisialisasi di sini untuk penggunaan ulang
+
+// ------------------------------------------------------------------
+// Fungsi untuk menghitung MD5 dari file
+// ------------------------------------------------------------------
+function calculateFileMD5(filePath) {
+    try {
+        var file = File.$new(filePath);
+        if (!file.exists()) {
+            debug("File tidak ditemukan: " + filePath);
+            return null;
+        }
+
+        var digest = MessageDigest.getInstance("MD5");
+        var inputStream = FileInputStream.$new(file);
+        var buffer = Java.array('byte', new Array(8192).fill(0));
+        var bytesRead;
+
+        while ((bytesRead = inputStream.read(buffer)) > 0) {
+            digest.update(buffer, 0, bytesRead);
+        }
+
+        inputStream.close();
+        var hashBytes = digest.digest();
+        var hexString = "";
+        for (var i = 0; i < hashBytes.length; i++) {
+            var hex = (hashBytes[i] & 0xff).toString(16);
+            if (hex.length === 1) hex = "0" + hex;
+            hexString += hex;
+        }
+        return hexString;
+    } catch (err) {
+        debug("Error menghitung MD5: " + err);
+        return null;
+    }
+}
+
+// ------------------------------------------------------------------
+// Pengecekan MD5 untuk file loader
+// ------------------------------------------------------------------
+var expectedMD5 = "05c6a637ed5b9d5f8ef2fed7cf2f70c1"; // Ganti dengan MD5 yang benar
+var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
+var loaderPath = libraryDir + "/libxcheatsloaders.so";
+
+debug("Memeriksa MD5 file loader: " + loaderPath);
+var calculatedMD5 = calculateFileMD5(loaderPath);
+var isLoaderValid = false;
+
+if (calculatedMD5 === null) {
+    debug("Gagal menghitung MD5 file loader: File tidak ditemukan.");
+    showToast("Gagal memverifikasi file loader: File tidak ditemukan!", 1);
+} else if (calculatedMD5 !== expectedMD5) {
+    debug("MD5 tidak cocok! Diharapkan: " + expectedMD5 + ", Ditemukan: " + calculatedMD5);
+    showToast("File loader tidak valid (MD5 mismatch)!", 1);
+} else if (calculatedMD5 == expectedMD5) {
+    debug("MD5 file loader valid: " + calculatedMD5);
+    showToast("[MODS] File loader verified ✅", 0);
+    isLoaderValid = true;
+}
 
 // ------------------------------------------------------------------
 // Fungsi untuk memainkan sound alert
@@ -492,14 +552,19 @@ function loadCheats() {
 
 // Logika utama program
 if (packageName === targetPackage) {
-    debug("Package name cocok, program utama akan dijalankan");
-    // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
-    loadCheats();
+    debug("Package name cocok, memeriksa validitas loader...");
+    if (isLoaderValid) {
+        debug("Loader valid, menjalankan program utama...");
+        // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
+        loadCheats();
 
-    // Tampilkan Toast Developer
-    debug("Menampilkan developer toast: [MODS] Patched by AeLL");
-    for (var ellgntng = 0; ellgntng < 3; ellgntng++) {
-        showToast("[MODS] Patched by AeLL", 1);
+        // Tampilkan Toast Developer
+        debug("Menampilkan developer toast: [MODS] Patched by AeLL");
+        for (var ellgntng = 0; ellgntng < 3; ellgntng++) {
+            showToast("[MODS] Patched by AeLL", 1);
+        }
+    } else {
+        debug("Loader tidak valid, program tidak dijalankan.");
     }
 } else {
     debug("Package name tidak cocok, program selesai.");
