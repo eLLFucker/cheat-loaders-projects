@@ -263,23 +263,29 @@ function countWorldFiles() {
 // Fungsi untuk menyalin default config dari asset ke direktori target
 // ------------------------------------------------------------------
 function copyDefaultConfig(configPath) {
-    debug("Menyalin default config ke " + configPath);
+    debug("Menyalin default config dari GitHub ke " + configPath);
     try {
-        var githuhConfigUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
-        var inputStream = fetchRawTextFromGithub(githuhConfigUrl);
-        var reader = BufferedReader.$new(InputStreamReader.$new(inputStream));
+        // Fetch content from GitHub using the provided function
+        var githubUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
+        var configContent = fetchRawTextFromGithub(githubUrl);
+        
+        if (configContent === null) {
+            throw new Error("Gagal mengambil config dari GitHub. URL tidak valid atau server tidak merespons.");
+        }
+
+        // Create output file
         var outputFile = File.$new(configPath);
         var outputStream = FileOutputStream.$new(outputFile);
-        var line;
-        var newLine = Java.use("java.lang.String").$new("\n");
-        while ((line = reader.readLine()) !== null) {
-            var bytes = Java.use("java.lang.String").$new(line + newLine).getBytes();
-            outputStream.write(bytes);
-        }
-        reader.close();
+        
+        // Write content to file
+        var bytes = Java.use("java.lang.String").$new(configContent).getBytes();
+        outputStream.write(bytes);
+        
+        // Close stream
         outputStream.close();
-        debug("Default config berhasil disalin.");
-        showToast("[MODS] Default config copied ✅", 0);
+        
+        debug("Default config berhasil disalin dari GitHub.");
+        showToast("[MODS] Default config copied from GitHub ✅", 0);
     } catch (err) {
         debug("Error pada copyDefaultConfig: " + err);
         showToast("Error copyDefaultConfig: " + err, 1);
