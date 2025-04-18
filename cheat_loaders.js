@@ -75,7 +75,7 @@ function calculateFileMD5(filePath) {
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
 // ------------------------------------------------------------------
-var expectedMD5 = "05c6a637ed5b9d5f8ef2fed7cf2f70c1"; // Ganti dengan MD5 yang benar
+var expectedMD5 = "22395bfed3914b610f9b5093c21df7e1"; // Ganti dengan MD5 yang benar
 var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
 var loaderPath = libraryDir + "/libxcheatsloaders.so";
 
