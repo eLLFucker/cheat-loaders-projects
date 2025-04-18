@@ -263,14 +263,14 @@ function countWorldFiles() {
 // Fungsi untuk menyalin default config dari asset ke direktori target
 // ------------------------------------------------------------------
 function copyDefaultConfig(configPath) {
-    debug("Menyalin default config dari GitHub ke " + configPath);
+    debug("Menyalin default config dari server ke " + configPath);
     try {
         // Fetch content from GitHub using the provided function
         var githubUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
         var configContent = fetchRawTextFromGithub(githubUrl);
         
         if (configContent === null) {
-            throw new Error("Gagal mengambil config dari GitHub. URL tidak valid atau server tidak merespons.");
+            throw new Error("Gagal mengambil config dari server. URL tidak valid atau server tidak merespons.");
         }
 
         // Create output file
