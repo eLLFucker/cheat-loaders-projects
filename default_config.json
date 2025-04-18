@@ -1,0 +1,124 @@
+{
+    /* 
+    Metadata berisi informasi tentang pembuat mod dan versi yang ditargetkan.
+    Bagian ini tidak boleh diedit untuk menjaga integritas mod.
+    */
+    "metadata": {
+        "author": "AeLL", // Pembuat mod
+        "targetGameVersion": "1.0.280", // Versi game yang didukung
+        "loaderVersion": "16.7", // Versi loader (FGLA) yang digunakan
+        "socialMedia": {
+            "tiktok": "@ellmdz19", // Akun TikTok resmi author
+            "youtube": "@noelnoskill" // Akun YouTube resmi author
+        }
+    },
+    
+    /* 
+    customSettings memungkinkan kustomisasi data pemain seperti nama, tahun lahir, candy, dan slot data.
+    Aktifkan dengan mengubah 'enabled' ke true dan masukkan nilai yang diinginkan.
+    */
+    "customSettings": {
+        "playerProfile": {
+            "playerName": {
+                "enabled": false, // Aktifkan untuk mengubah nama pemain
+                "value": "BOKU" // Nama kustom, default 'BOKU'
+                // FYI: there is no letter limit in the player name if using this feature
+            },
+            "birthYear": {
+                "enabled": false, // Aktifkan untuk mengubah tahun lahir
+                "value": 2000 // Tahun lahir kustom, max 2147483647 (batas int32)
+            }
+        },
+        "economy": {
+            "candy": {
+                "enabled": true, // Aktifkan untuk mengubah jumlah candy
+                "value": 987347 // Jumlah candy, hindari lebih dari 1 juta untuk mencegah ban
+            }
+        },
+        "storage": {
+            "dataSlots": {
+                "enabled": true, // Aktifkan untuk membuka slot data tambahan
+                "value": 2147483647 // Jumlah slot untuk maksimal skin, world, dll disimpan
+            }
+        }
+    },
+    
+    /* 
+    mods berisi fitur cheat yang dapat diaktifkan/nonaktifkan.
+    - core: Fitur utama seperti menyelesaikan misi dan top-up candy.
+    - utility: Fitur pendukung seperti menghapus iklan dan cache.
+    - accountSecurity: Fitur berisiko tinggi yang memengaruhi keamanan akun.
+    */
+    "mods": {
+        "core": [
+            {
+                "id": "completeAllTasks",
+                "enabled": true // Selesaikan semua misi awal game secara otomatis
+            },
+            {
+                "id": "freeTopUp",
+                "enabled": true, // Aktifkan top-up candy gratis tanpa pembelian
+                "options": {
+                    "productId": 2, // Pilih jumlah candy untuk top-up
+                    "products": [
+                        {"id": 0, "name": "400 Candy"}, // Isi productId dengan nilai 0 untuk Top-up 400 candy
+                        {"id": 1, "name": "1680 Candy"}, // Isi productId dengan nilai 1 untuk Top-up 1680 candy
+                        {"id": 2, "name": "2200 Candy"}, // Isi productId dengan nilai 2 untuk Top-up 2200 candy
+                        {"id": 3, "name": "4600 Candy"}, // Isi productId dengan nilai 3 untuk Top-up 4600 candy
+                        {"id": 4, "name": "9600 Candy"} // Isi productId dengan nilai 4 untuk Top-up 9600 candy
+                    ]
+                }
+            },
+            {
+                "id": "extraFeatures",
+                "enabled": true // Lewati tutorial, dialog rating, dan misi harian
+            }
+        ],
+        "utility": [
+            {
+                "id": "disableAds",
+                "enabled": true // Nonaktifkan semua iklan dalam game
+            },
+            {
+                "id": "highPerformance",
+                "enabled": false // Tingkatkan performa game (menggunakan lebih banyak baterai)
+            },
+            {
+                "id": "flushCache",
+                "enabled": true // Hapus cache iklan setiap kali game dibuka
+            },
+            {
+                "id": "debugToast",
+                "enabled": true // Tampilkan notifikasi debug (untuk pengembangan)
+            }
+        ],
+        "accountSecurity": [
+            {
+                "id": "bypassBanMultiplayer",
+                "enabled": true // Coba lewati ban dari mode multiplayer
+            }
+        ]
+    },
+    
+    /* 
+    uiSettings mengontrol elemen antarmuka pengguna yang ditampilkan di layar.
+    Aktifkan dengan mengubah 'enabled' ke true untuk menampilkan elemen.
+    */
+    "uiSettings": {
+        "displayCoordinates": {
+            "enabled": true // Tampilkan koordinat di tengah atas layar
+        },
+        "displayPlayerName": {
+            "enabled": true // Tampilkan nama pemain di layar
+        },
+        "displayClock": {
+            "enabled": true // Tampilkan jam di pojok kiri bawah layar
+        },
+        "displaySeason": {
+            "enabled": false // Tampilkan indikator musim di tengah atas layar
+        },
+        "displayGuides": {
+            "enabled": true // Tampilkan panduan interaksi di layar
+        }
+    }
+}
