@@ -265,7 +265,8 @@ function countWorldFiles() {
 function copyDefaultConfig(configPath) {
     debug("Menyalin default config ke " + configPath);
     try {
-        var inputStream = assetManager.open("default_config/cheats_config.json");
+        var githuhConfigUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
+        var inputStream = fetchRawTextFromGithub(githuhConfigUrl);
         var reader = BufferedReader.$new(InputStreamReader.$new(inputStream));
         var outputFile = File.$new(configPath);
         var outputStream = FileOutputStream.$new(outputFile);
