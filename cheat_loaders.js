@@ -284,8 +284,8 @@ function copyDefaultConfig(configPath) {
         // Close stream
         outputStream.close();
         
-        debug("Default config berhasil disalin dari GitHub.");
-        showToast("[MODS] Default config copied from GitHub ✅", 0);
+        debug("Default config berhasil disalin menggunakan metode GET.");
+        showToast("[MODS] Default config copied ✅", 0);
     } catch (err) {
         debug("Error pada copyDefaultConfig: " + err);
         showToast("Error copyDefaultConfig: " + err, 1);
