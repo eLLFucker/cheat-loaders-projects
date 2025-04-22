@@ -4,13 +4,13 @@ var infoText = "\n----  Informasi Author  ----\n" +
     "Tiktok   : @ellmdz19\n" +
     "YouTube  : @noelnoskill\n" +
     "----  Informasi Mods  ----\n" +
-    "Release  : 15-04-2025\n" +
-    "V-Game   : 1.0.280 (176)\n" +
+    "Release  : 22-04-2025\n" +
+    "V-Game   : 1.0.282 (178)\n" +
     "Loader   : FGLA v16.7\n" +
     "License  : Apache License 2.0\n";
 
 // Log awal bahwa script telah mulai berjalan
-debug("Script CheatLoader mulai dijalankan.");
+debug("[INFO] Script utama mulai dijalankan.");
 debug(infoText);
 
 // ------------------------------------------------------------------
@@ -44,7 +44,7 @@ function calculateFileMD5(filePath) {
     try {
         var file = File.$new(filePath);
         if (!file.exists()) {
-            debug("File tidak ditemukan: " + filePath);
+            debug("[WARNING] File tidak ditemukan: " + filePath);
             return null;
         }
 
@@ -67,7 +67,7 @@ function calculateFileMD5(filePath) {
         }
         return hexString;
     } catch (err) {
-        debug("Error menghitung MD5: " + err);
+        debug("[ERROR] Error menghitung MD5: " + err);
         return null;
     }
 }
@@ -79,18 +79,18 @@ var expectedMD5 = "6f8ad8dc5328c2969a197b5b45969730"; // Ganti dengan MD5 yang b
 var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
 var loaderPath = libraryDir + "/libxcheatsloaders.so";
 
-debug("Memeriksa MD5 file loader: " + loaderPath);
+debug("[INFO] Memeriksa MD5 file loader: " + loaderPath);
 var calculatedMD5 = calculateFileMD5(loaderPath);
 var isLoaderValid = false;
 
 if (calculatedMD5 === null) {
-    debug("Gagal menghitung MD5 file loader: File tidak ditemukan.");
-    showToast("Gagal memverifikasi file loader: File tidak ditemukan!", 1);
+    debug("[INFO] Gagal menghitung MD5 file loader: File not found.");
+    showToast("Gagal memverifikasi file loader: File not found!", 1);
 } else if (calculatedMD5 !== expectedMD5) {
-    debug("MD5 tidak cocok! Diharapkan: " + expectedMD5 + ", Ditemukan: " + calculatedMD5);
+    debug("[INFO] MD5 tidak cocok! Diharapkan: " + expectedMD5 + ", Ditemukan: " + calculatedMD5);
     showToast("File loader tidak valid", 1);
 } else if (calculatedMD5 == expectedMD5) {
-    debug("MD5 file loader valid: " + calculatedMD5);
+    debug("[INFO] MD5 file loader valid: " + calculatedMD5);
     showToast("[MODS] File loader verified ✅", 0);
     isLoaderValid = true;
 }
@@ -99,7 +99,7 @@ if (calculatedMD5 === null) {
 // Fungsi untuk memainkan sound alert
 // ------------------------------------------------------------------
 function playSound() {
-    debug("Memainkan sound alert: you are an idiot");
+    debug("[INFO] Memainkan sound alert: you are an idiot");
     try {
         if (mediaPlayer === null) {
             mediaPlayer = MediaPlayer.$new();
@@ -117,12 +117,12 @@ function playSound() {
                     mediaPlayer.stop();
                 }
                 mediaPlayer.reset(); // Reset, bukan release, untuk penggunaan ulang
-                debug("Sound alert dihentikan.");
+                debug("[INFO] Sound alert dihentikan.");
             }, 15000);
         });
     } catch (err) {
         showToast("Error memainkan sound: " + err, 1);
-        debug("Error saat memainkan sound: " + err);
+        debug("[ERROR] Error saat memainkan sound: " + err);
     }
 }
 
@@ -140,9 +140,9 @@ function deleteRecursive(fileOrDir) {
             }
         }
         var result = fileOrDir.delete();
-        debug("Menghapus " + fileOrDir.getAbsolutePath() + " : " + (result ? "BERHASIL" : "GAGAL"));
+        debug("[INFO] Menghapus " + fileOrDir.getAbsolutePath() + " : " + (result ? "BERHASIL" : "GAGAL"));
     } catch (e) {
-        debug("Error menghapus file/direktori: " + e);
+        debug("[ERROR] Error menghapus file/direktori: " + e);
     }
 }
 
@@ -150,17 +150,17 @@ function deleteRecursive(fileOrDir) {
 // Fungsi untuk menghapus cache aplikasi
 // ------------------------------------------------------------------
 function clearCache() {
-    debug("Memulai proses clear cache.");
+    debug("[INFO] Memulai proses clear cache.");
     try {
         var cacheDir = File.$new(context.getExternalCacheDir().getAbsolutePath());
         if (cacheDir.exists()) {
             deleteRecursive(cacheDir);
-            debug("Cache folder berhasil dihapus: " + cacheDir.getAbsolutePath());
+            debug("[INFO] Cache folder berhasil dihapus: " + cacheDir.getAbsolutePath());
         } else {
-            debug("Cache folder tidak ditemukan.");
+            debug("[INFO] Cache folder tidak ditemukan.");
         }
     } catch (e) {
-        debug("Error saat clear cache: " + e);
+        debug("[ERROR] Error saat clear cache: " + e);
     }
 }
 
@@ -168,7 +168,7 @@ function clearCache() {
 // Fungsi untuk menghitung file model pada data game
 // ------------------------------------------------------------------
 function countModelFiles() {
-    debug("Memulai pengecekan file model.");
+    debug("[INFO] Memulai pengecekan file model.");
     try {
         var storagePath = context.getExternalFilesDir(null).getAbsolutePath() + "/Save/Model/";
         var targetDir = File.$new(storagePath);
@@ -187,11 +187,11 @@ function countModelFiles() {
             }
         }
         var message = count + " Skin Model Loaded";
-        debug("Model files count: " + count);
+        debug("[INFO] Model files count: " + count);
         showToast("[DEBUG] " + message, 0);
         return count;
     } catch (err) {
-        debug("Error pada countModelFiles: " + err.message);
+        debug("[ERROR] Error pada countModelFiles: " + err.message);
         return 0;
     }
 }
@@ -200,7 +200,7 @@ function countModelFiles() {
 // Fungsi untuk menghitung file portrait pada data game
 // ------------------------------------------------------------------
 function countPortraitFiles() {
-    debug("Memulai pengecekan file portrait.");
+    debug("[INFO] Memulai pengecekan file portrait.");
     try {
         var storagePath = context.getExternalFilesDir(null).getAbsolutePath() + "/Save/Portrait/";
         var targetDir = File.$new(storagePath);
@@ -219,11 +219,11 @@ function countPortraitFiles() {
             }
         }
         var message = count + " Portrait Loaded";
-        debug("Portrait files count: " + count);
+        debug("[INFO] Portrait files count: " + count);
         showToast("[DEBUG] " + message, 0);
         return count;
     } catch (err) {
-        debug("Error pada countPortraitFiles: " + err.message);
+        debug("[ERROR] Error pada countPortraitFiles: " + err.message);
         return 0;
     }
 }
@@ -232,7 +232,7 @@ function countPortraitFiles() {
 // Fungsi untuk menghitung folder world pada data game
 // ------------------------------------------------------------------
 function countWorldFiles() {
-    debug("Memulai pengecekan folder World.");
+    debug("[INFO] Memulai pengecekan folder World.");
     try {
         var baseWPath = context.getExternalFilesDir(null).getAbsolutePath() + "/Save/Creation/World/";
         var worldDir = File.$new(baseWPath);
@@ -250,11 +250,11 @@ function countWorldFiles() {
             }
         }
         var resultMessage = folderCount + " World Folder Loaded";
-        debug("World folder count: " + folderCount);
+        debug("[INFO] World folder count: " + folderCount);
         showToast("[DEBUG] " + resultMessage, 0);
         return folderCount;
     } catch (error) {
-        debug("Error pada countWorldFiles: " + error.message);
+        debug("[ERROR] Error pada countWorldFiles: " + error.message);
         return 0;
     }
 }
@@ -263,12 +263,12 @@ function countWorldFiles() {
 // Fungsi untuk menyalin default config dari asset ke direktori target
 // ------------------------------------------------------------------
 function copyDefaultConfig(configPath) {
-    debug("Menyalin default config dari server ke " + configPath);
+    debug("[INFO] Menyalin default config dari server ke " + configPath);
     try {
         // Fetch content from GitHub using the provided function
         var githubUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
         var configContent = fetchRawTextFromGithub(githubUrl);
-        
+
         if (configContent === null) {
             throw new Error("Gagal mengambil config dari server. URL tidak valid atau server tidak merespons.");
         }
@@ -276,18 +276,18 @@ function copyDefaultConfig(configPath) {
         // Create output file
         var outputFile = File.$new(configPath);
         var outputStream = FileOutputStream.$new(outputFile);
-        
+
         // Write content to file
         var bytes = Java.use("java.lang.String").$new(configContent).getBytes();
         outputStream.write(bytes);
-        
+
         // Close stream
         outputStream.close();
-        
-        debug("Default config berhasil disalin menggunakan metode GET.");
+
+        debug("[INFO] Default config berhasil disalin menggunakan metode fetch dari server.");
         showToast("[MODS] Default config copied ✅", 0);
     } catch (err) {
-        debug("Error pada copyDefaultConfig: " + err);
+        debug("[ERROR] Error pada copyDefaultConfig: " + err);
         showToast("Error copyDefaultConfig: " + err, 1);
         throw err;
     }
@@ -297,7 +297,7 @@ function copyDefaultConfig(configPath) {
 // Fungsi untuk menghapus komentar pada string JSON
 // ------------------------------------------------------------------
 function removeComments(jsonString) {
-    debug("Menghapus komentar pada string JSON config.");
+    debug("[INFO] Menghapus komentar pada string JSON.");
     return jsonString.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "");
 }
 
@@ -305,7 +305,7 @@ function removeComments(jsonString) {
 // Fungsi untuk membaca dan memvalidasi konfigurasi cheat
 // ------------------------------------------------------------------
 function getConfig() {
-    debug("Memulai proses pembacaan config.");
+    debug("[INFO] Memulai proses pembacaan config.");
     try {
         var basePath = context.getExternalFilesDir(null).getAbsolutePath() + "/Mods/CheatLoaders/";
         var configPath = basePath + "cheats_config.json";
@@ -315,10 +315,10 @@ function getConfig() {
             if (!baseFolder.mkdirs()) {
                 throw new Error("Gagal membuat folder config.");
             }
-            debug("Folder base config tidak ditemukan, berhasil dibuat.");
+            debug("[INFO] Folder base config tidak ditemukan, berhasil dibuat.");
         }
         if (!configFile.exists()) {
-            debug("Config file tidak ditemukan, menyalin default config.");
+            debug("[INFO] File tidak ditemukan, menyalin config default.");
             copyDefaultConfig(configPath);
         }
         var fileReader = Java.use("java.io.FileReader").$new(configFile);
@@ -342,14 +342,14 @@ function getConfig() {
             config.metadata.socialMedia.tiktok !== originalValues.tiktok ||
             config.metadata.socialMedia.youtube !== originalValues.youtube) {
             playSound();
-            debug("Pelanggaran integritas config: Metadata telah diubah.");
+            debug("[FUCK YOU] Pelanggaran integritas config: Metadata telah diubah.");
             throw new Error("Idiot mencoba mengubah metadata asli di config.json!😹😹😹");
         }
 
-        debug("Config berhasil dibaca dan valid.");
+        debug("[INFO] File berhasil dibaca dan valid.");
         return config;
     } catch (err) {
-        debug("Error pada getConfig: " + err);
+        debug("[ERROR] Error pada getConfig: " + err);
         showToast("" + err, 1);
         return null;
     }
@@ -365,12 +365,12 @@ function limitNumericValue(value, fieldName) {
     // Khusus untuk candy: batasi ke 999999 jika melebihi 1 juta
     if (fieldName === "candy" && value > 1000000) {
         cappedValue = 999999;
-        debug("Nilai candy " + value + " melebihi 1 juta, dibatasi ke 999999.");
+        debug("[INFO] Nilai candy " + value + " melebihi 1 juta, dibatasi ke 999999.");
     }
     // Batasi semua nilai ke max int32
     if (cappedValue > maxInt32) {
         cappedValue = maxInt32;
-        debug("Nilai " + fieldName + " " + value + " melebihi batas int32, dibatasi ke " + maxInt32 + ".");
+        debug("[INFO] Nilai " + fieldName + " " + value + " melebihi batas int32, dibatasi ke " + maxInt32 + ".");
     }
     return cappedValue;
 }
@@ -379,32 +379,32 @@ function limitNumericValue(value, fieldName) {
 // Fungsi untuk menerapkan konfigurasi cheat ke SharedPreferences
 // ------------------------------------------------------------------
 function loadCheats() {
-    debug("Memulai penerapan config.");
+    debug("[INFO] Memulai penerapan config.");
     var config = getConfig();
     if (!config) {
-        debug("Penerapan config gagal karena config tidak tersedia.");
+        debug("[ERROR] Penerapan config gagal karena config tidak tersedia.");
         showToast("Error: Config gagal dimuat", 0);
         return;
     } else {
-        debug("Config berhasil dimuat.");
-        showToast("[MODS] CONFIG Loaded ✅", 0);
+        debug("[INFO] Config berhasil dimuat.");
+        // showToast("[MODS] CONFIG Loaded ✅", 0);
     }
 
     try {
         // Kustomisasi Pengaturan (customSettings)
         if (config.customSettings.playerProfile.playerName.enabled) {
             editor.putString("Account__User_Name", config.customSettings.playerProfile.playerName.value);
-            debug("Custom Player Name diterapkan: " + config.customSettings.playerProfile.playerName.value);
+            debug("[MODS] Custom Player Name diterapkan: " + config.customSettings.playerProfile.playerName.value);
         }
         if (config.customSettings.playerProfile.birthYear.enabled) {
             var birthYear = limitNumericValue(config.customSettings.playerProfile.birthYear.value, "birthYear");
             editor.putInt("Account__Birthday__Year", birthYear);
-            debug("Custom Birth Year diterapkan: " + birthYear);
+            debug("[MODS] Custom Birth Year diterapkan: " + birthYear);
         }
         if (config.customSettings.economy.candy.enabled) {
             var candy = limitNumericValue(config.customSettings.economy.candy.value, "candy");
             editor.putInt("Candy", candy);
-            debug("Custom Candy diterapkan: " + candy);
+            debug("[MODS] Custom Candy diterapkan: " + candy);
         }
         var slotKeys = [
             "Dressing__Data__Slot__Number", "Data_Slot_Number", "Doll__Data__Slot__Number",
@@ -418,12 +418,12 @@ function loadCheats() {
             var dataSlots = limitNumericValue(config.customSettings.storage.dataSlots.value, "dataSlots");
             slotKeys.forEach(function(key) {
                 editor.putInt(key, dataSlots);
-                debug("Custom slot diterapkan untuk " + key + ": " + dataSlots);
+                debug("[MODS] Custom slot diterapkan untuk " + key + ": " + dataSlots);
             });
         } else {
             slotKeys.forEach(function(key) {
                 editor.putInt(key, 100);
-                debug("Slot default diterapkan untuk " + key + ": 100");
+                debug("[MODS] Slot default diterapkan untuk " + key + ": 100");
             });
         }
 
@@ -438,12 +438,12 @@ function loadCheats() {
         if (completeAllTasks && completeAllTasks.enabled) {
             taskKeys.forEach(function(key) {
                 editor.putInt(key, 1);
-                debug("Task " + key + " diselesaikan (1).");
+                debug("[MODS] Task " + key + " diselesaikan (1).");
             });
         } else {
             taskKeys.forEach(function(key) {
                 editor.putInt(key, 0);
-                debug("Task " + key + " direset (0).");
+                debug("[MODS] Task " + key + " direset (0).");
             });
         }
 
@@ -452,17 +452,17 @@ function loadCheats() {
             editor.putInt("Tutorial_Is_Finished", 1);
             editor.putInt("Rated", 1);
             editor.putInt("Setting_Is_Explore", 0);
-            debug("Extra Features diaktifkan.");
+            debug("[MODS] Extra Features diaktifkan.");
         } else {
             editor.putInt("Setting_Is_Explore", 1);
-            debug("Extra Features dinonaktifkan.");
+            debug("[MODS] Extra Features dinonaktifkan.");
         }
 
         var freeTopUp = config.mods.core.find(mod => mod.id === "freeTopUp");
         if (freeTopUp && freeTopUp.enabled) {
             editor.putInt("Iap__Product_Id", freeTopUp.options.productId);
             editor.putInt("Iap__Purchased", 1);
-            debug("Free Top Up diaktifkan dengan product id: " + freeTopUp.options.productId);
+            debug("[MODS] Free Top Up diaktifkan dengan product id: " + freeTopUp.options.productId);
         }
 
         // Fitur Utility (mods.utility)
@@ -470,26 +470,26 @@ function loadCheats() {
         if (disableAds && disableAds.enabled) {
             editor.putInt("Setting_Is_IAP", 1);
             editor.putInt("IAPed", 1);
-            debug("Disable Ads diaktifkan.");
+            debug("[MODS] Disable Ads diaktifkan.");
         } else {
             editor.putInt("Setting_Is_IAP", 0);
             editor.putInt("IAPed", 0);
-            debug("Disable Ads dinonaktifkan.");
+            debug("[MODS] Disable Ads dinonaktifkan.");
         }
 
         var highPerformance = config.mods.utility.find(mod => mod.id === "highPerformance");
         if (highPerformance && highPerformance.enabled) {
             editor.putInt("Setting_Power_Save", 0);
-            debug("Mode Performa diaktifkan.");
+            debug("[MODS] Mode Performa diaktifkan.");
         } else {
             editor.putInt("Setting_Power_Save", 1);
-            debug("Mode Performa dinonaktifkan.");
+            debug("[MODS] Mode Performa dinonaktifkan.");
         }
 
         var flushCache = config.mods.utility.find(mod => mod.id === "flushCache");
         if (flushCache && flushCache.enabled) {
             clearCache();
-            debug("Clear cache dieksekusi.");
+            debug("[MODS] Clear cache dieksekusi.");
         }
 
         var debugToast = config.mods.utility.find(mod => mod.id === "debugToast");
@@ -497,82 +497,82 @@ function loadCheats() {
             countModelFiles();
             countPortraitFiles();
             countWorldFiles();
-            debug("Debug toast ditampilkan.");
+            debug("[MODS] Debug toast ditampilkan.");
         }
 
         // Fitur Account Security (mods.accountSecurity)
         var bypassBanMultiplayer = config.mods.accountSecurity.find(mod => mod.id === "bypassBanMultiplayer");
         if (bypassBanMultiplayer && bypassBanMultiplayer.enabled) {
             editor.putInt("Multiplayer__Banned", 0);
-            debug("Bypass ban multiplayer diaktifkan.");
+            debug("[MODS] Bypass ban multiplayer diaktifkan.");
         }
 
         // Fitur Antarmuka Pengguna (uiSettings)
         if (config.uiSettings.displayCoordinates.enabled) {
             editor.putInt("Setting_Is_Coord", 1);
-            debug("Tampilkan koordinat diaktifkan.");
+            debug("[MODS] Tampilkan koordinat diaktifkan.");
         } else {
             editor.putInt("Setting_Is_Coord", 0);
-            debug("Tampilkan koordinat dinonaktifkan.");
+            debug("[MODS] Tampilkan koordinat dinonaktifkan.");
         }
 
         if (config.uiSettings.displaySeason.enabled) {
             editor.putInt("Setting__Period", 1);
-            debug("Tampilkan periode (musim) diaktifkan.");
+            debug("[MODS] Tampilkan periode (musim) diaktifkan.");
         } else {
             editor.putInt("Setting__Period", 0);
-            debug("Tampilkan periode (musim) dinonaktifkan.");
+            debug("[MODS] Tampilkan periode (musim) dinonaktifkan.");
         }
 
         if (config.uiSettings.displayPlayerName.enabled) {
             editor.putInt("Setting_Is_Display_Name", 1);
-            debug("Tampilkan nama pemain diaktifkan.");
+            debug("[MODS] Tampilkan nama pemain diaktifkan.");
         } else {
             editor.putInt("Setting_Is_Display_Name", 0);
-            debug("Tampilkan nama pemain dinonaktifkan.");
+            debug("[MODS] Tampilkan nama pemain dinonaktifkan.");
         }
 
         if (config.uiSettings.displayClock.enabled) {
             editor.putInt("Setting_Is_Clock", 1);
-            debug("Tampilkan jam diaktifkan.");
+            debug("[MODS] Tampilkan jam diaktifkan.");
         } else {
             editor.putInt("Setting_Is_Clock", 0);
-            debug("Tampilkan jam dinonaktifkan.");
+            debug("[MODS] Tampilkan jam dinonaktifkan.");
         }
 
         if (config.uiSettings.displayGuides.enabled) {
             editor.putInt("Setting_Is_Guide", 1);
-            debug("Tampilkan panduan interaksi diaktifkan.");
+            debug("[MODS] Tampilkan panduan interaksi diaktifkan.");
         } else {
             editor.putInt("Setting_Is_Guide", 0);
-            debug("Tampilkan panduan interaksi dinonaktifkan.");
+            debug("[MODS] Tampilkan panduan interaksi dinonaktifkan.");
         }
 
         // Simpan seluruh konfigurasi ke SharedPreferences
         editor.commit();
-        debug("Konfigurasi berhasil diterapkan dan disimpan.");
+        debug("[MODS] Konfigurasi berhasil diterapkan dan disimpan.");
     } catch (e) {
-        debug("Error saat menerapkan config: " + e);
+        debug("[ERROR] Error saat menerapkan config: " + e);
         showToast("Error applyConfig: " + e, 1);
     }
 }
 
 // Logika utama program
 if (packageName === targetPackage) {
-    debug("Package name cocok, memeriksa validitas loader...");
+    debug("[LIB] Package name cocok, memeriksa validitas loader...");
     if (isLoaderValid) {
-        debug("Loader valid, menjalankan program utama...");
+        debug("[LIB] Loader valid, menjalankan program utama...");
         // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
         loadCheats();
 
         // Tampilkan Toast Developer
-        debug("Menampilkan developer toast: [MODS] Patched by AeLL");
+        debug("[LIB] Menampilkan developer toast: [MODS] Patched by AeLL");
         for (var ellgntng = 0; ellgntng < 3; ellgntng++) {
             showToast("[MODS] Patched by AeLL", 1);
         }
     } else {
-        debug("Loader tidak valid, program tidak dijalankan.");
+        debug("[LIB] Loader tidak valid, program tidak dijalankan.");
     }
 } else {
-    debug("Package name tidak cocok, program selesai.");
-}
+    debug("[LIB] Package name tidak cocok, program selesai.");
+            }
