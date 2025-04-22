@@ -4,8 +4,8 @@ var infoText = "\n----  Informasi Author  ----\n" +
     "Tiktok   : @ellmdz19\n" +
     "YouTube  : @noelnoskill\n" +
     "----  Informasi Mods  ----\n" +
-    "Release  : 22-04-2025\n" +
-    "V-Game   : 1.0.282 (178)\n" +
+    "Release  : 23-04-2025\n" +
+    "V-Game   : 1.0.28x\n" +
     "Loader   : FGLA v16.7\n" +
     "License  : Apache License 2.0\n";
 
@@ -75,7 +75,7 @@ function calculateFileMD5(filePath) {
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
 // ------------------------------------------------------------------
-var expectedMD5 = "97d713c3c075e61969f40712fce54a4f"; // Ganti dengan MD5 yang benar
+var expectedMD5 = "94d23e91fd73de50d0b2d688683f41c7"; // Ganti dengan MD5 yang benar
 var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
 var loaderPath = libraryDir + "/libxcheatsloaders.so";
 
