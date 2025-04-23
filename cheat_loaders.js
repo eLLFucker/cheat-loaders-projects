@@ -267,7 +267,7 @@ function copyDefaultConfig(configPath) {
     try {
         // Fetch content from GitHub using the provided function
         var githubUrl = "https://raw.githubusercontent.com/eLLFucker/cheat-loaders-projects/refs/heads/main/default_config.json";
-        var configContent = fetchRawTextFromGithub(githubUrl);
+        var configContent = fetchUrlRawText(githubUrl);
 
         if (configContent === null) {
             throw new Error("Gagal mengambil config dari server. URL tidak valid atau server tidak merespons.");
