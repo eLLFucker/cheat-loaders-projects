@@ -307,7 +307,7 @@ function removeComments(jsonString) {
 function getConfig() {
     debug("[INFO] Memulai proses pembacaan config.");
     try {
-        var basePath = context.getExternalFilesDir(null).getAbsolutePath() + "/Mods/CheatLoaders/";
+        var basePath = context.getExternalFilesDir(null).getAbsolutePath() + "/Mods/cheatLoader/";
         var configPath = basePath + "cheats_config.json";
         var baseFolder = File.$new(basePath);
         var configFile = File.$new(configPath);
