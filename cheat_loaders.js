@@ -88,7 +88,7 @@ if (calculatedMD5 === null) {
     showToast("Gagal memverifikasi file loader: File not found!", 1);
 } else if (calculatedMD5 !== expectedMD5) {
     debug("[INFO] MD5 tidak cocok! Diharapkan: " + expectedMD5 + ", Ditemukan: " + calculatedMD5);
-    showToast("File loader tidak valid", 1);
+    showToast("[MODS] File loader unverified ❌", 1);
 } else if (calculatedMD5 == expectedMD5) {
     debug("[INFO] MD5 file loader valid: " + calculatedMD5);
     showToast("[MODS] File loader verified ✅", 0);
