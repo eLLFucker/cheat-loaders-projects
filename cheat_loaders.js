@@ -186,7 +186,7 @@ function countModelFiles() {
                 count++;
             }
         }
-        var message = count + " Skin Model Loaded";
+        var message = count + " Model detected";
         debug("[INFO] Model files count: " + count);
         showToast("[DEBUG] " + message, 0);
         return count;
@@ -218,7 +218,7 @@ function countPortraitFiles() {
                 count++;
             }
         }
-        var message = count + " Portrait Loaded";
+        var message = count + " Portrait detected";
         debug("[INFO] Portrait files count: " + count);
         showToast("[DEBUG] " + message, 0);
         return count;
@@ -249,7 +249,7 @@ function countWorldFiles() {
                 folderCount++;
             }
         }
-        var resultMessage = folderCount + " World Folder Loaded";
+        var resultMessage = folderCount + " World detected";
         debug("[INFO] World folder count: " + folderCount);
         showToast("[DEBUG] " + resultMessage, 0);
         return folderCount;
