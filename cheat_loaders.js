@@ -128,6 +128,7 @@ function fakeRamInfo() {
     };
 
    debug("[MODS] fakeRamInfo aktif: semua sumber RAM dipalsuin ke 24GB total, 20GB available");
+showToast("[MODS] FakeRam Active", 1);
 }
 
 // ------------------------------------------------------------------
