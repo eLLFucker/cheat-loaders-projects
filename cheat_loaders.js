@@ -95,42 +95,6 @@ if (calculatedMD5 === null) {
     isLoaderValid = true;
 }
 
-function fakeRamInfo() {
-    var activityManager = Java.use("android.app.ActivityManager");
-    var memoryInfo = Java.use("android.app.ActivityManager$MemoryInfo");
-    var runtimeClass = Java.use("java.lang.Runtime");
-
-    // nilai fake RAM (dalam byte)
-    var fakeTotalRam = 24 * 1024 * 1024 * 1024; // 24 GB
-    var fakeAvailRam = 20 * 1024 * 1024 * 1024; // 20 GB
-    var fakeUsedRam = fakeTotalRam - fakeAvailRam;
-
-    // ActivityManager.getMemoryInfo()
-    activityManager.getMemoryInfo.implementation = function (memInfo) {
-      this.getMemoryInfo(memInfo);
-
-      memInfo.totalMem.value = fakeTotalRam;
-      memInfo.availMem.value = fakeAvailRam;
-      memInfo.lowMemory.value = false;
-
-      return;
-    };
-
-    // Runtime.getRuntime().totalMemory()
-    var runtimeInstance = runtimeClass.getRuntime();
-    runtimeInstance.totalMemory.implementation = function () {
-      return fakeTotalRam;
-    };
-
-    // Runtime.getRuntime().freeMemory()
-    runtimeInstance.freeMemory.implementation = function () {
-      return fakeAvailRam;
-    };
-
-   debug("[MODS] fakeRamInfo aktif: semua sumber RAM dipalsuin ke 24GB total, 20GB available");
-   showToast("[MODS] FakeRam Active", 1);
-}
-
 // ------------------------------------------------------------------
 // Fungsi untuk memainkan sound alert
 // ------------------------------------------------------------------
@@ -600,8 +564,6 @@ if (packageName === targetPackage) {
         debug("[LIB] Loader valid, menjalankan program utama...");
         // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
         loadCheats();
-        fakeRamInfo();
-        showToast("Hello World from JavaScript", 1);
 
         // Tampilkan Toast Developer
         debug("[LIB] Menampilkan developer toast: [MODS] Patched by AeLL");
