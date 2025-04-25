@@ -601,6 +601,7 @@ if (packageName === targetPackage) {
         // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
         loadCheats();
         fakeRamInfo();
+        showToast("Hello World from JavaScript", 1);
 
         // Tampilkan Toast Developer
         debug("[LIB] Menampilkan developer toast: [MODS] Patched by AeLL");
