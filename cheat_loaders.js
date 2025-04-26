@@ -72,8 +72,6 @@ function calculateFileMD5(filePath) {
     }
 }
 
-functifunctionon fakeRamInfo() {
-
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
 // ------------------------------------------------------------------
