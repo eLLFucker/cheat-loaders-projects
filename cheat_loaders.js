@@ -1,7 +1,7 @@
 // Informasi detail mengenai author dan mods yang akan ditampilkan di log
 var infoText = "\n----  Informasi Author  ----\n" +
     "Author   : @AeLL\n" +
-    "Tiktok   : @ellmdz19\n" +
+    "Tiktok   : @navernoel\n" +
     "YouTube  : @noelnoskill\n" +
     "----  Informasi Mods  ----\n" +
     "Release  : 23-04-2025\n" +
@@ -335,7 +335,7 @@ function getConfig() {
         // Validasi metadata
         var originalValues = {
             "author": "AeLL",
-            "tiktok": "@ellmdz19",
+            "tiktok": "@navernoel",
             "youtube": "@noelnoskill"
         };
         if (config.metadata.author !== originalValues.author ||
