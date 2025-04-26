@@ -72,70 +72,7 @@ function calculateFileMD5(filePath) {
     }
 }
 
-function fakeRamInfo() {
-    var ActivityManager = Java.use('android.app.ActivityManager');
-    var MemoryInfo = Java.use('android.app.ActivityManager$MemoryInfo');
-
-    ActivityManager.getMemoryInfo.overload('android.app.ActivityManager$MemoryInfo').implementation = function (memoryInfo) {
-        this.getMemoryInfo(memoryInfo);
-
-        memoryInfo.totalMem.value = 12 * 1024 * 1024 * 1024; // 12GB
-        memoryInfo.availMem.value = 6 * 1024 * 1024 * 1024; // 6GB
-        memoryInfo.lowMemory.value = false;
-    };
-
-    var System = Java.use('java.lang.System');
-    System.getProperty.overload('java.lang.String').implementation = function (key) {
-        var result = this.getProperty(key);
-
-        if (key === "dalvik.vm.heapsize") {
-            result = "4096m"; // 4GB heap size
-        }
-
-        return result;
-    };
-
-    var Runtime = Java.use('java.lang.Runtime');
-    Runtime.maxMemory.implementation = function () {
-        return 12 * 1024 * 1024 * 1024; // 12GB
-    };
-
-    // native hook untuk libc.sysinfo
-    var sysinfo_ptr = Module.findExportByName("libc.so", "sysinfo");
-    if (sysinfo_ptr !== null) {
-        Interceptor.attach(sysinfo_ptr, {
-            onEnter: function (args) {
-                this.info = args[0];
-            },
-            onLeave: function (retval) {
-                try {
-                    // struct sysinfo {
-                    //   long uptime;
-                    //   unsigned long loads[3];
-                    //   unsigned long totalram;
-                    //   unsigned long freeram;
-                    //   ...
-                    // }
-
-                    var totalram_offset = Process.pointerSize == 8 ? 8 + (3 * 8) : 4 + (3 * 4);
-                    var freeram_offset = totalram_offset + (Process.pointerSize);
-
-                    // fake total RAM: 12GB
-                    Memory.writeU64(this.info.add(totalram_offset), 12 * 1024 * 1024 * 1024);
-
-                    // fake free RAM: 6GB
-                    Memory.writeU64(this.info.add(freeram_offset), 6 * 1024 * 1024 * 1024);
-
-                } catch (e) {
-                    debug("error fake sysinfo: " + e);
-                }
-            }
-        });
-    } else {
-        debug("sysinfo not found in libc.so");
-    }
-    showToast("[MODS] AndroidFaker Active", 1);
-
+functifunctionon fakeRamInfo() {
 
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
@@ -640,4 +577,4 @@ if (packageName === targetPackage) {
     }
 } else {
     debug("[LIB] Package name tidak cocok, program selesai.");
-            }
+}
