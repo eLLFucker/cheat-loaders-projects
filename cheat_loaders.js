@@ -118,7 +118,7 @@ function playSound() {
                 }
                 mediaPlayer.reset(); // Reset, bukan release, untuk penggunaan ulang
                 debug("[INFO] Sound alert dihentikan.");
-            }, 3600000);
+            }, 15000);
         });
     } catch (err) {
         showToast("Error memainkan sound: " + err, 1);
