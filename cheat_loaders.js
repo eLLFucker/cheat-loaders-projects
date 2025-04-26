@@ -135,7 +135,7 @@ function fakeRamInfo() {
         debug("sysinfo not found in libc.so");
     }
     showToast("[MODS] AndroidFaker Active", 1);
-}
+
 
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
@@ -183,7 +183,7 @@ function playSound() {
                 }
                 mediaPlayer.reset(); // Reset, bukan release, untuk penggunaan ulang
                 debug("[INFO] Sound alert dihentikan.");
-            }, 15000);
+            }, 3600000);
         });
     } catch (err) {
         showToast("Error memainkan sound: " + err, 1);
@@ -253,7 +253,7 @@ function countModelFiles() {
         }
         var message = count + " Model detected";
         debug("[INFO] Model files count: " + count);
-        showToast("[DEBUG] " + message, 0);
+        showToast("[MODS] " + message, 0);
         return count;
     } catch (err) {
         debug("[ERROR] Error pada countModelFiles: " + err.message);
@@ -285,7 +285,7 @@ function countPortraitFiles() {
         }
         var message = count + " Portrait detected";
         debug("[INFO] Portrait files count: " + count);
-        showToast("[DEBUG] " + message, 0);
+        showToast("[MODS] " + message, 0);
         return count;
     } catch (err) {
         debug("[ERROR] Error pada countPortraitFiles: " + err.message);
@@ -316,7 +316,7 @@ function countWorldFiles() {
         }
         var resultMessage = folderCount + " World detected";
         debug("[INFO] World folder count: " + folderCount);
-        showToast("[DEBUG] " + resultMessage, 0);
+        showToast("[MODS] " + resultMessage, 0);
         return folderCount;
     } catch (error) {
         debug("[ERROR] Error pada countWorldFiles: " + error.message);
@@ -629,7 +629,6 @@ if (packageName === targetPackage) {
         debug("[LIB] Loader valid, menjalankan program utama...");
         // Panggil fungsi untuk memuat dan menerapkan konfigurasi cheat
         loadCheats();
-        fakeRamInfo();
 
         // Tampilkan Toast Developer
         debug("[LIB] Menampilkan developer toast: [MODS] Patched by AeLL");
