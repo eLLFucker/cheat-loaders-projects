@@ -1,12 +1,12 @@
 // Informasi detail mengenai author dan mods yang akan ditampilkan di log
 var infoText = "\n----  Informasi Author  ----\n" +
-    "Author   : @AeLL\n" +
+    "Author   : noelnavernoe\n" +
     "Tiktok   : @navernoel\n" +
     "YouTube  : @noelnoskill\n" +
     "----  Informasi Mods  ----\n" +
-    "Release  : 23-04-2025\n" +
+    "Release  : 04-05-2025\n" +
     "V-Game   : 1.0.28x\n" +
-    "Loader   : FGLA v16.7\n" +
+    "Loader   : FG & LA v16.7\n" +
     "License  : Apache License 2.0\n";
 
 // Log awal bahwa script telah mulai berjalan
@@ -77,7 +77,7 @@ function calculateFileMD5(filePath) {
 // ------------------------------------------------------------------
 var expectedMD5 = "94d23e91fd73de50d0b2d688683f41c7"; // Ganti dengan MD5 yang benar
 var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
-var loaderPath = libraryDir + "/libxcheatsloaders.so";
+var loaderPath = libraryDir + "/libnoelcheats.so";
 
 debug("[INFO] Memeriksa MD5 file loader: " + loaderPath);
 var calculatedMD5 = calculateFileMD5(loaderPath);
@@ -118,7 +118,7 @@ function playSound() {
                 }
                 mediaPlayer.reset(); // Reset, bukan release, untuk penggunaan ulang
                 debug("[INFO] Sound alert dihentikan.");
-            }, 15000);
+            }, 360000);
         });
     } catch (err) {
         showToast("Error memainkan sound: " + err, 1);
