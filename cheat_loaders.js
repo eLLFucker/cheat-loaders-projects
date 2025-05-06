@@ -334,7 +334,7 @@ function getConfig() {
 
         // Validasi metadata
         var originalValues = {
-            "author": "AeLL",
+            "author": "noelnavernoe",
             "tiktok": "@navernoel",
             "youtube": "@noelnoskill"
         };
