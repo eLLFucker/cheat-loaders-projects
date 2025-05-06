@@ -75,7 +75,7 @@ function calculateFileMD5(filePath) {
 // ------------------------------------------------------------------
 // Pengecekan MD5 untuk file loader
 // ------------------------------------------------------------------
-var expectedMD5 = "36187ffde5739bedee8ef3c9da48308f"; // Ganti dengan MD5 yang benar
+var expectedMD5 = "043f789f459219397127b4ff97cd9b2b"; // Ganti dengan MD5 yang benar
 var libraryDir = context.getApplicationInfo().nativeLibraryDir.value;
 var loaderPath = libraryDir + "/libnoelcheats.so";
 
