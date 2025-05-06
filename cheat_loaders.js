@@ -343,7 +343,7 @@ function getConfig() {
             config.metadata.socialMedia.youtube !== originalValues.youtube) {
             playSound();
             debug("[FUCK YOU] Pelanggaran integritas config: Metadata telah diubah.");
-            throw new Error("Idiot mencoba mengubah metadata asli di config.json!😹😹😹");
+            throw new Error("Idiot mengubah metadata asli di config.json!😹😹😹");
         }
 
         debug("[INFO] File berhasil dibaca dan valid.");
