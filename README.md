@@ -1,10 +1,10 @@
-# Cheat Load Project
+## Frida Cheats
 Project cheat game via shared preference inject use frida gadget library 
 Berbabis fetch hook utama dari rawtext github yang kemudian di eval di local hook 
 
 (Maybe not for public)
 
-# Fitur/Keunggulan yang sekarang tersedia 
+## Fitur/Keunggulan yang sekarang tersedia 
 - Flush game cache path (Android/data/)
 - Debug Toast count Model, Portrait, & World
 - Custom Username (No Letter Limit)
