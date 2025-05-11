@@ -1,4 +1,4 @@
-// init dipanggil langsung saat eval di dalam Java.perform
+// init: fungsi untuk menjalankan kode utama (main execution)
 function init() {
     // ---- Import Java Classes ----
     var File = Java.use('java.io.File');
@@ -25,18 +25,6 @@ function init() {
         loaderVersion: "FG & LA v16.7",
         license: "Apache License 2.0"
     };
-
-    // debug: mencetak pesan ke Logcat dengan tag "MODS"
-    function debug(msg) {
-        Log.d("MODS", msg);
-    }
-
-    // showToast: menampilkan pesan toast di layar
-    function showToast(message, length) {
-        var len = length || 0;
-        var msgStr = JString.$new(message);
-        Toast.makeText(context, msgStr, len).show();
-    }
 
     // calculateMD5: menghitung nilai MD5 dari file
     function calculateMD5(path) {
@@ -106,7 +94,7 @@ function init() {
             out.write(JString.$new(content).getBytes());
             out.close();
 
-            showToast('[MODS] Default config copied ✅');
+            showToast('[MODS] Default config copied ✅', 0);
         } catch (e) {
             debug('Fetch config error: ' + e);
             throw e;
@@ -260,8 +248,8 @@ function init() {
         showToast('[MODS] Loader unverified ❌', 1);
         return;
     }
-    showToast('[MODS] Loader verified ✅');
-    showToast('[MODS] Hello World from GitHub');
+    showToast('[MODS] Loader verified ✅', 1);
+    showToast('[MODS] Hello World from GitHub', 0);
     debug('Loader valid, loading cheats');
     var cfg = loadConfig();
     if (!cfg) return debug('Config load failed');
