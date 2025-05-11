@@ -57,7 +57,7 @@ function checkLoaderValidity() {
     var loaderPath = libraryDir + "/libnoelcheats.so";
     var calculatedMD5 = calculateFileMD5(loaderPath);
     if (calculatedMD5 === null) {
-        showToast("Failed to verify loader file: File not found!", 1);
+        showToast("[MODS] Loader file unverified: 404", 1);
         return false;
     } else if (calculatedMD5 !== expectedMD5) {
         showToast("[MODS] Loader file unverified ❌", 1);
@@ -286,7 +286,7 @@ function capNumericValue(value, fieldName) {
 }
 
 // welcome: Memunculkan pesan welcome dengan username di boku boku
-function welcome() {
+function WelcomeMsg() {
     var userName = prefs.getString("Account__User_Name", "");
     showToast("[MODS] Welcome " + userName, 1);
 }
@@ -437,7 +437,7 @@ function initialize() {
     var targetPackage = "com.pixticle.bokuboku.patch";
     if (packageName === targetPackage) {
         if (checkLoaderValidity()) {
-            welcome();
+            WelcomeMsg();
             var config = loadConfig();
             if (config) {
                 applyConfig(config);
