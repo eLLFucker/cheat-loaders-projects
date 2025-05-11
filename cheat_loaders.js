@@ -285,6 +285,12 @@ function capNumericValue(value, fieldName) {
     return cappedValue;
 }
 
+// welcome: Memunculkan pesan welcome dengan username di boku boku
+function welcome() {
+    var userName = prefs.getString("Account__User_Name", "");
+    showToast("[MODS] Welcome " + userName, 1);
+}
+
 // applyConfig: Menerapkan konfigurasi cheat ke SharedPreferences
 function applyConfig(config) {
     try {
@@ -431,6 +437,7 @@ function initialize() {
     var targetPackage = "com.pixticle.bokuboku.patch";
     if (packageName === targetPackage) {
         if (checkLoaderValidity()) {
+            welcome();
             var config = loadConfig();
             if (config) {
                 applyConfig(config);
