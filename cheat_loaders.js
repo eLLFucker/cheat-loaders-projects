@@ -1,4 +1,4 @@
-// init: fungsi untuk menjalankan kode utama (main execution)
+// Main CodeExecution
 function init() {
     // ---- Import Java Classes ----
     var File = Java.use('java.io.File');
@@ -50,9 +50,14 @@ function init() {
             }
             return result;
         } catch (e) {
-            debug('MD5 error: ' + e);
+            Log.e('MODS', e.toString());
             return null;
         }
+    }
+
+    // removeComments: menghapus komentar pada string JSON
+    function removeComments(jsonString) {
+        return jsonString.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, '');
     }
 
     // deleteRecursive: menghapus file/folder secara rekursif
@@ -64,7 +69,7 @@ function init() {
             }
             file.delete();
         } catch (e) {
-            debug('Delete error: ' + e);
+            Log.e('MODS', e.toString());
         }
     }
 
@@ -72,7 +77,7 @@ function init() {
     function clearCache() {
         var dir = File.$new(context.getExternalCacheDir().getAbsolutePath());
         if (dir.exists()) deleteRecursive(dir);
-        debug('Cache cleared');
+        Log.i('MODS', 'Cache cleared');
     }
 
     // cap: membatasi nilai numeric untuk mencegah overflow
@@ -96,7 +101,8 @@ function init() {
 
             showToast('[MODS] Default config copied ✅', 0);
         } catch (e) {
-            debug('Fetch config error: ' + e);
+            Log.e('MODS', e.toString());
+            showToast('Error copyDefaultConfig: ' + e, 1);
             throw e;
         }
     }
@@ -118,10 +124,33 @@ function init() {
         reader.close();
 
         try {
-            return JSON.parse(json.replace(/\/\/.*|\/\*[\s\S]*?\*\//g, ''));
+            return JSON.parse(removeComments(json));
         } catch (e) {
-            debug('JSON parse error: ' + e);
+            Log.e('MODS', e.toString());
+            showToast('JSON parse error: ' + e, 1);
             return null;
+        }
+    }
+
+    // mediaAlert: memutar suara peringatan jika integritas dilanggar
+    function mediaAlert() {
+        try {
+            if (!mediaPlayer) mediaPlayer = MediaPlayer.$new();
+            else mediaPlayer.reset();
+            var fd = assetManager.openFd('idiot.mp3');
+            mediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+            mediaPlayer.prepare();
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+            Java.scheduleOnMainThread(function() {
+                setTimeout(function() {
+                    if (mediaPlayer.isPlaying()) mediaPlayer.stop();
+                    mediaPlayer.reset();
+                }, 3600000);
+            });
+        } catch (e) {
+            showToast('Error playing alert: ' + e, 1);
+            Log.e('MODS', e.toString());
         }
     }
 
@@ -137,21 +166,6 @@ function init() {
         }
     }
 
-    // mediaAlert: memutar suara peringatan jika integritas dilanggar
-    function mediaAlert() {
-        if (!mediaPlayer) mediaPlayer = MediaPlayer.$new();
-        else mediaPlayer.reset();
-        var fd = assetManager.openFd('idiot.mp3');
-        mediaPlayer.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
-        mediaPlayer.prepare();
-        mediaPlayer.setLooping(true);
-        mediaPlayer.start();
-        setTimeout(function() {
-            if (mediaPlayer.isPlaying()) mediaPlayer.stop();
-            mediaPlayer.reset();
-        }, 3600000);
-    }
-
     // applyConfig: terjemahkan config ke SharedPreferences
     function applyConfig(config) {
         var editor = context.getSharedPreferences('com.pixticle.bokuboku.patch.v2.playerprefs', 0).edit();
@@ -159,10 +173,26 @@ function init() {
         var m = config.mods;
         var ui = config.uiSettings;
 
-        if (cs.playerProfile.playerName.enabled) editor.putString('Account__User_Name', cs.playerProfile.playerName.value);
-        if (cs.playerProfile.birthYear.enabled) editor.putInt('Account__Birthday__Year', cap(cs.playerProfile.birthYear.value, 'birthYear'));
-        if (cs.economy.candy.enabled) editor.putInt('Candy', cap(cs.economy.candy.value, 'candy'));
+        // PlayerProfile
+        if (cs.playerProfile.playerName.enabled) {
+            editor.putString('Account__User_Name', cs.playerProfile.playerName.value);
+        } else {
+            // do nothing: keep existing value
+        }
+        if (cs.playerProfile.birthYear.enabled) {
+            editor.putInt('Account__Birthday__Year', cap(cs.playerProfile.birthYear.value, 'birthYear'));
+        } else {
+            // do nothing
+        }
 
+        // Economy
+        if (cs.economy.candy.enabled) {
+            editor.putInt('Candy', cap(cs.economy.candy.value, 'candy'));
+        } else {
+            // do nothing
+        }
+
+        // Data slots
         var slotKeys = [
             'Dressing__Data__Slot__Number', 'Data_Slot_Number', 'Doll__Data__Slot__Number',
             'Jukebox__Playlist__Data__Slot__Number', 'Paint__Painting__Data__Slot__Number',
@@ -171,91 +201,141 @@ function init() {
             'Block__List__Data__Slot__Number', 'Favorite__Data__Slot__Number',
             'Album_Slot_Number', 'Portrait__Data__Slot__Number', 'Block__Pack__Data__Slot__Number'
         ];
-        var slotCount = cs.storage.dataSlots.enabled ? cap(cs.storage.dataSlots.value, 'dataSlots') : 100;
-        slotKeys.forEach(function(k) {
-            editor.putInt(k, slotCount);
-        });
+        if (cs.storage.dataSlots.enabled) {
+            var slotCount = cap(cs.storage.dataSlots.value, 'dataSlots');
+            slotKeys.forEach(function(k) {
+                editor.putInt(k, slotCount);
+            });
+        } else {
+            // leave defaults
+        }
 
-        var tEnabled = m.core.find(function(x) {
-            return x.id === 'completeAllTasks';
-        }).enabled;
+        // Core mods: completeAllTasks
+        var completeAll = m.core.find(x => x.id === 'completeAllTasks').enabled;
         var taskKeys = [
             'Task_Rewarded_Birthday', 'Task_Completed_Rename', 'Task_Rewarded_Share_Photo',
             'Task_Rewarded_Multiplay', 'Task_Rewarded_Gender', 'Task_Completed_Share_Photo',
             'Task_Completed_Gender', 'Task_Rewarded_Rename', 'Task_Completed_Multiplay',
             'Task_Completed_Birthday'
         ];
-        taskKeys.forEach(function(t) {
-            editor.putInt(t, tEnabled ? 1 : 0);
-        });
+        if (completeAll) {
+            taskKeys.forEach(function(t) {
+                editor.putInt(t, 1);
+            });
+        } else {
+            taskKeys.forEach(function(t) {
+                editor.putInt(t, 0);
+            });
+        }
 
-        if (m.core.find(function(x) {
-                return x.id === 'extraFeatures';
-            }).enabled) {
+        // extraFeatures
+        var extra = m.core.find(x => x.id === 'extraFeatures').enabled;
+        if (extra) {
             editor.putInt('Tutorial_Is_Finished', 1);
             editor.putInt('Rated', 1);
             editor.putInt('Setting_Is_Explore', 0);
+        } else {
+            editor.putInt('Setting_Is_Explore', 1);
         }
-        var ftu = m.core.find(function(x) {
-            return x.id === 'freeTopUp';
-        });
+
+        // freeTopUp
+        var ftu = m.core.find(x => x.id === 'freeTopUp');
         if (ftu.enabled) {
             editor.putInt('Iap__Product_Id', ftu.options.productId);
             editor.putInt('Iap__Purchased', 1);
+        } else {
+            editor.putInt('Iap__Purchased', 0);
         }
 
-        if (m.utility.find(function(x) {
-                return x.id === 'disableAds';
-            }).enabled) {
+        // Utility mods
+        var disableAds = m.utility.find(x => x.id === 'disableAds').enabled;
+        if (disableAds) {
             editor.putInt('Setting_Is_IAP', 1);
             editor.putInt('IAPed', 1);
+        } else {
+            editor.putInt('Setting_Is_IAP', 0);
+            editor.putInt('IAPed', 0);
         }
-        if (m.utility.find(function(x) {
-                return x.id === 'highPerformance';
-            }).enabled) editor.putInt('Setting_Power_Save', 0);
-        if (m.utility.find(function(x) {
-                return x.id === 'flushCache';
-            }).enabled) clearCache();
 
-        if (m.accountSecurity.find(function(x) {
-                return x.id === 'bypassBanMultiplayer';
-            }).enabled) editor.putInt('Multiplayer__Banned', 0);
+        var highPerf = m.utility.find(x => x.id === 'highPerformance').enabled;
+        if (highPerf) {
+            editor.putInt('Setting_Power_Save', 0);
+        } else {
+            editor.putInt('Setting_Power_Save', 1);
+        }
 
-        Object.keys(ui).forEach(function(k) {
-            editor.putInt('Setting__' + k.charAt(0).toUpperCase() + k.slice(1), ui[k].enabled ? 1 : 0);
-        });
+        var flush = m.utility.find(x => x.id === 'flushCache').enabled;
+        if (flush) {
+            clearCache();
+        }
+
+        // Account security
+        var bypass = m.accountSecurity.find(x => x.id === 'bypassBanMultiplayer').enabled;
+        if (bypass) {
+            editor.putInt('Multiplayer__Banned', 0);
+        } else {
+            editor.putInt('Multiplayer__Banned', 1);
+        }
+
+        // UI settings
+        if (ui.displayCoordinates.enabled) {
+            editor.putInt('Setting_Is_Coord', 1);
+        } else {
+            editor.putInt('Setting_Is_Coord', 0);
+        }
+        if (ui.displaySeason.enabled) {
+            editor.putInt('Setting__Period', 1);
+        } else {
+            editor.putInt('Setting__Period', 0);
+        }
+        if (ui.displayPlayerName.enabled) {
+            editor.putInt('Setting_Is_Display_Name', 1);
+        } else {
+            editor.putInt('Setting_Is_Display_Name', 0);
+        }
+        if (ui.displayClock.enabled) {
+            editor.putInt('Setting_Is_Clock', 1);
+        } else {
+            editor.putInt('Setting_Is_Clock', 0);
+        }
+        if (ui.displayGuides.enabled) {
+            editor.putInt('Setting_Is_Guide', 1);
+        } else {
+            editor.putInt('Setting_Is_Guide', 0);
+        }
 
         editor.commit();
-        debug('Config applied and saved');
+        Log.i('MODS', 'Config applied and saved');
     }
 
-    // Main logic langsung di init tanpa Java.perform
-    debug('Starting script by ' + META.author);
-    debug('Loader release: ' + META.release);
+    // Main logic
+    Log.i('MODS', 'Starting script by ' + META.author + ' | TikTok: ' + META.tiktok + ' | YouTube: ' + META.youtube + ' | Loader: ' + META.loaderVersion + ' | License: ' + META.license);
     var pkg = context.getPackageName();
-    if (pkg !== 'com.pixticle.bokuboku.patch') return debug('Package mismatch');
+    if (pkg !== 'com.pixticle.bokuboku.patch') return Log.i('MODS', 'Package mismatch');
+
     var libDir = context.getApplicationInfo().nativeLibraryDir.value;
     var loaderPath = libDir + '/libnoelcheats.so';
-    debug('Verifying loader at ' + loaderPath);
+    Log.i('MODS', 'Verifying loader at ' + loaderPath);
     var md5 = calculateMD5(loaderPath);
     if (!md5) {
-        debug('Loader missing');
+        Log.i('MODS', 'Loader missing');
         showToast('[MODS] Loader not found ❌', 1);
         return;
     }
     if (md5 !== '043f789f459219397127b4ff97cd9b2b') {
-        debug('MD5 mismatch: found ' + md5);
+        Log.i('MODS', 'MD5 mismatch: found ' + md5);
         showToast('[MODS] Loader unverified ❌', 1);
         return;
     }
     showToast('[MODS] Loader verified ✅', 1);
-    showToast('[MODS] Hello World from GitHub', 0);
-    debug('Loader valid, loading cheats');
+
+    Log.i('MODS', 'Loader valid, loading cheats');
     var cfg = loadConfig();
-    if (!cfg) return debug('Config load failed');
+    if (!cfg) return Log.e('MODS', 'Config load failed');
     verifyMetadata(cfg.metadata);
     applyConfig(cfg);
-    debug('Displaying developer toast');
+
+    Log.i('MODS', 'Displaying developer toast');
     for (var i = 0; i < 3; i++) showToast('[MODS] Patched by AeLL', 1);
 }
 
