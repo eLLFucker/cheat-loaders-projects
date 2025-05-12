@@ -10,52 +10,52 @@ Hook utama di-fetch dari raw text GitHub, kemudian di-eval dan dijalankan secara
 
 ## Fitur dan Keunggulan
 
-- Flush Game Cache
+- Flush Game Cache - 
 Menghapus cache game di direktori Android/data/.
 
-- Debug Toast
+- Debug Toast - 
 Menampilkan jumlah Model, Portrait, dan World di layar.
 
-- Custom Username
+- Custom Username - 
 Mengganti nama pengguna tanpa batasan jumlah huruf.
 
-- Custom Birthday Year
+- Custom Birthday Year - 
 Mengatur tahun lahir di profil game hingga 9 digit (default normal: 4 digit).
 
-- Custom Candy Value
+- Custom Candy Value - 
 Menyetel nilai candy hingga maksimal 1 juta.
 
-- Custom Slot Value
+- Custom Slot Value - 
 Mengatur semua nilai slot game (termasuk semua slot).
 
-- Complete Early Game Tasks
+- Complete Early Game Tasks - 
 Menyelesaikan semua tugas tahap awal dalam game.
 
-- Skip Tutorial
+- Skip Tutorial - 
 Melewati tutorial awal.
 
-- Remove Rating Dialog
+- Remove Rating Dialog - 
 Menghilangkan permintaan rating di dalam aplikasi.
 
-- Remove Daily Mission
+- Remove Daily Mission - 
 Menghapus misi harian.
 
-- Free Top-Up
+- Free Top-Up - 
 Top-up candy gratis di awal game.
 
-- Disable Ads
+- Disable Ads - 
 Menghilangkan semua iklan di dalam aplikasi.
 
-- High Performance Mode
+- High Performance Mode - 
 Mengaktifkan mode performa game.
 
-- Bypass Account Ban
+- Bypass Account Ban - 
 Mengatasi atau melewati banned akun.
 
-- User Interface Control
+- User Interface Control - 
 Kontrol terhadap beberapa elemen UI.
 
-- Remove Analytics
+- Remove Analytics - 
 Menghapus analisis yang dilakukan aplikasi untuk mendapat data iklan, informasi device, dll
 
 Fully Configurable via JSON
