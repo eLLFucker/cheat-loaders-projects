@@ -431,6 +431,62 @@ function applyConfig(config) {
     }
 }
 
+
+// Inisialisasi Fake Device
+var isHooked = false;
+var currentCores = 0;
+var currentMemMB = 0;
+
+function spoofSystemInfo(targetCores, targetMemoryMB) {
+  // update nilai global
+  currentCores = targetCores;
+  currentMemMB = targetMemoryMB;
+
+  if (!isHooked) {
+    // pastikan IL2CPP sudah ready
+    Module.ensureInitialized('libil2cpp.so');
+
+    // hook GetProcessorCount
+    var symGetCores = Module.findExportByName(
+      'libil2cpp.so',
+      '_ZN11SystemInfo17GetProcessorCountEv'
+    );
+    if (symGetCores) {
+      Interceptor.attach(symGetCores, {
+        onLeave(retval) {
+          retval.replace(currentCores);
+          debug('[*] Spoofed cores ->', currentCores);
+        }
+      });
+    } else {
+      debug('[-] Symbol GetProcessorCount tidak ditemukan');
+    }
+
+    // hook GetSystemMemorySize
+    var symGetMem = Module.findExportByName(
+      'libil2cpp.so',
+      '_ZN11SystemInfo19GetSystemMemorySizeEv'
+    );
+    if (symGetMem) {
+      Interceptor.attach(symGetMem, {
+        onLeave(retval) {
+          retval.replace(currentMemMB);
+          debug('[*] Spoofed memory MB ->', currentMemMB);
+        }
+      });
+    } else {
+      debug('[-] Symbol GetSystemMemorySize tidak ditemukan');
+    }
+
+    isHooked = true;
+    debug('[*] Hooks terpasang, siap dipanggil lagi dengan nilai baru');
+  } else {
+    debug('[*] Hooks sudah terpasang, hanya memperbarui nilai spoof');
+  }
+}
+
+spoofSystemInfo(16, 12 * 1024);
+
 // initialize: Titik masuk utama untuk menjalankan skrip
 function initialize() {
     var packageName = context.getPackageName();
