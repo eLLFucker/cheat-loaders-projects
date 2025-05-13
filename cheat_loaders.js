@@ -254,12 +254,12 @@ function loadConfig() {
 
         // Memeriksa perubahan pada metadata
         var alteredFields = [];
-        if (config.metadata.author !== originalValues.author) alteredFields.push("author");
-        if (config.metadata.socialMedia.tiktok !== originalValues.tiktok) alteredFields.push("tiktok");
-        if (config.metadata.socialMedia.youtube !== originalValues.youtube) alteredFields.push("youtube");
+        if (config.metadata.author !== originalValues.author) alteredFields.push("Author");
+        if (config.metadata.socialMedia.tiktok !== originalValues.tiktok) alteredFields.push("TikTok");
+        if (config.metadata.socialMedia.youtube !== originalValues.youtube) alteredFields.push("YouTube");
 
         if (alteredFields.length > 0) {
-            var errorMessage = "Metadata altered: " + alteredFields.join(", ") + " changed!";
+            var errorMessage = "Idiot memodifikasi metadata: " + "metadata " + alteredFields.join(", ") + " diubah!";
             playAlertSound();
             showToast(errorMessage, 1);
             throw new Error(errorMessage);
@@ -288,7 +288,7 @@ function capNumericValue(value, fieldName) {
 // welcome: Memunculkan pesan welcome dengan username di boku boku
 function WelcomeMsg() {
     var userName = prefs.getString("Account__User_Name", "");
-    showToast("[MODS] Welcome " + userName, 1);
+    showToast("[MODS] User " + userName + " detected", 1);
 }
 
 // applyConfig: Menerapkan konfigurasi cheat ke SharedPreferences
@@ -382,6 +382,7 @@ function applyConfig(config) {
 
         var debugToast = config.mods.utility.find(mod => mod.id === "debugToast");
         if (debugToast && debugToast.enabled) {
+            WelcomeMsg();
             countModelFiles();
             countPortraitFiles();
             countWorldFolders();
@@ -437,7 +438,6 @@ function initialize() {
     var targetPackage = "com.pixticle.bokuboku.patch";
     if (packageName === targetPackage) {
         if (checkLoaderValidity()) {
-            WelcomeMsg();
             var config = loadConfig();
             if (config) {
                 applyConfig(config);
