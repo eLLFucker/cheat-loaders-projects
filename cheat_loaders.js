@@ -285,10 +285,13 @@ function capNumericValue(value, fieldName) {
     return cappedValue;
 }
 
+
 // welcome: Memunculkan pesan welcome dengan username di boku boku
 function WelcomeMsg() {
     var userName = prefs.getString("Account__User_Name", "");
-    showToast("[MODS] User " + userName + " detected", 1);
+    var decodedUserName = decodeURIComponent(userName);
+    var displayUserName = decodedUserName.length > 24 ? decodedUserName.substring(0, 24) + "..." : decodedUserName;
+    showToast("[MODS] User " + displayUserName + " detected", 1);
 }
 
 // applyConfig: Menerapkan konfigurasi cheat ke SharedPreferences
